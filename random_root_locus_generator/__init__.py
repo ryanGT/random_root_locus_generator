@@ -4,6 +4,7 @@ import control
 
 rand = np.random.rand
 
+__version__ = "1.0.6"
 
 def one_random_real(r=-10):
     """Generate one random real pole or zero with maximum radius r.
@@ -151,13 +152,36 @@ def random_zeros(poles):
 
 
 
+def eliminate_near_cancellations(poles, zeros, tol=0.1):
+    """Eliminate all pole/zero pairs where the distance is less than tol"""
+    # for each zero, find the nearest pole and eliminate it if it is
+    # closer than tol
+    i = 0
+    zlist = zeros
+    m = len(zlist)
+    plist = poles
+    while (i < m):
+        dist_vect = np.abs(np.array(plist) - zlist[i])
+        if dist_vect.min() < tol:
+            zlist.pop(i)
+            n = dist_vect.argmin()
+            plist.pop(n)
+            m = len(zlist)
+        else:
+            i += 1
+    return np.array(plist), np.array(zlist)
+        
+        
+    
+
 def random_transfer_function():
     """Generate a random transfer function for root locus practice."""
     poles = random_poles()
     zeros = random_zeros(poles)
-    zeros2 = np.floor(np.array(zeros)*2)*0.5
-    num = np.poly(zeros2)
-    den = np.poly(poles)
+    zeros2 = np.floor(np.array(zeros)*2)*0.5# I guess I am rounding them all down here....
+    poles3, zeros3 = eliminate_near_cancellations(poles, zeros2.tolist())
+    num = np.poly(zeros3)
+    den = np.poly(poles3)
     G = control.TransferFunction(num,den)
     return G
 
