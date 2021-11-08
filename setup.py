@@ -5,7 +5,7 @@ import setuptools
 
 setuptools.setup(
     name='random_root_locus_generator',    # This is the name of your PyPI-package.
-    version='1.0.6',
+    version='1.1.0',
     url='https://github.com/ryanGT/random_root_locus_generator',
     author='Ryan Krauss',
     author_email='ryanwkrauss@gmail.com',

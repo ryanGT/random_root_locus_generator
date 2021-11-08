@@ -4,7 +4,7 @@ import control
 
 rand = np.random.rand
 
-__version__ = "1.0.6"
+__version__ = "1.1.0"
 
 def one_random_real(r=-10):
     """Generate one random real pole or zero with maximum radius r.
@@ -67,13 +67,15 @@ def random_real_poles(N):
 
 
 
-def random_poles():
+def random_poles(max_poles=5):
     """Determine how many poles to include and generate 
     a random list of poles including the possibility of one
-    complex conjugate pair."""
+    complex conjugate pair.
+
+    max_poles is the maximum number of poles the TF will have."""
 
     # Number of poles
-    N = int(5*rand())+1# up to five poles
+    N = int(max_poles*rand())+1# up to five poles
     #print('N = %i' % N)
 
     r_c = rand()
@@ -174,9 +176,9 @@ def eliminate_near_cancellations(poles, zeros, tol=0.1):
         
     
 
-def random_transfer_function():
+def random_transfer_function(max_poles=5):
     """Generate a random transfer function for root locus practice."""
-    poles = random_poles()
+    poles = random_poles(max_poles=max_poles)
     zeros = random_zeros(poles)
     zeros2 = np.floor(np.array(zeros)*2)*0.5# I guess I am rounding them all down here....
     poles3, zeros3 = eliminate_near_cancellations(poles, zeros2.tolist())
